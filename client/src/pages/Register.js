@@ -4,8 +4,10 @@ import {ToastContainer,toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 import { registerRoute } from '../utils/apiRoutes'
+import { useNavigate } from 'react-router-dom'
 
 function Register() {
+    const navigate=useNavigate()
     const [values,setValues]=useState({
         email:"",
         username:"",
@@ -23,6 +25,16 @@ function Register() {
                 username,  
                 password
             })
+            if(data){
+                console.log(data)
+                if(data.status===false){
+                    toast.error(data.msg,toastOptions)
+                }else{
+                    localStorage.setItem('chat-app user',JSON.stringify(data.user))
+                    navigate("/chat")
+                }
+            }
+
     }}
 
     const handleChange=(e)=>{

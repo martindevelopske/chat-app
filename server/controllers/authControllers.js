@@ -1,8 +1,25 @@
 const userModel=require("../models/userModel")
 const axios=require("axios")
+const bcrypt=require('bcrypt')
 
 const login=async(req,res,next)=>{
-
+    
+    try{
+        const {email,password}=req.body
+    const user=await userModel.findOne({
+        email
+    })
+    if(!user){
+        return res.json({msg:"incorrect username or password",status:false})
+    }
+    const comparePassword=await bcrypt.compare(password,user.password)
+    if(!comparePassword){
+        return res.json({msg:"incorrect username or password",status:false})
+    }
+    return res.json({status:true})
+    }catch(e){
+        return e.message
+    }
 }
 const register=async (req,res,next)=>{
    try{
